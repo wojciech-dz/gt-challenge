@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RSS url{% endblock %}
+
+{% block body %}
+    <h3>Podaj adres źródła RSS</h3>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
