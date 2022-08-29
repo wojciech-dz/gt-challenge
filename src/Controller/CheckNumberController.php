@@ -29,10 +29,9 @@ class CheckNumberController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-//            var_dump($data);
             $items = $this->service->getItems($url . $data['film_number']);
             return $this->renderForm('show_films.html.twig', [
-                'film_number' => $data['film_number'], //$filmNumber,
+                'film_number' => $data['film_number'],
                 'titles' => $items,
             ]);
         }
@@ -41,4 +40,19 @@ class CheckNumberController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    /**
+     * @Route("/check-film", name="app_check_film", methods={"GET"})
+     */
+    public function checkFilmAction(Request $request): Response
+    {
+        $number = $_GET['number'];
+        $url = 'https://www.familysearch.org/service/search/cat/v2/search?count=20&query=+film_number:';
+        $items = $this->service->getItems($url . $number);
+        return $this->renderForm('show_films.html.twig', [
+            'film_number' => $number,
+            'titles' => $items,
+        ]);
+    }
+
 }

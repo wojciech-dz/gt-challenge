@@ -1,13 +1,5 @@
-{% extends 'base.html.twig' %}
+<h2>Tytuły dla wprowadzonego numeru: {{ film_number }}</h2>
 
-{% block title %}News{% endblock %}
-
-{% block body %}
-    <h2>Najnowsze informacje z kanału {{ channel }}</h2>
-
-    {% for info in news %}
-{#        <h3>{{ info }}</h3>#}
-        <h3>{{ info.title }}</h3>
-        <p>{{ info.message }}<p>
-    {% endfor %}
-{% endblock %}
+{% for item in titles %}
+    <p>{{ item }}</p>
+{% endfor %}

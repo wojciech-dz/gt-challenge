@@ -4,40 +4,40 @@ namespace App\Service;
 
 use GuzzleHttp\Client;
 use SimpleXMLElement;
+use SplFileObject;
 
-class ParseService
+class FamilyTreeService
 {
     private $client;
 
-    public function getRss(string $url): array
+    public function getItems(string $url): array
     {
-        $news = [];
+        $items = [];
         $this->client = new Client([
             'headers' => ['User-Agent' => 'QuasiReader']
         ]);
-        $feed_response = $this->client->request('GET', $url);
-        if ($feed_response->getStatusCode() == 200) {
-            if ($feed_response->hasHeader('content-length')) {
-                $contentLength = $feed_response->getHeader('content-length')[0];
+        $itemsResponse = $this->client->request('GET', $url);
+        if ($itemsResponse->getStatusCode() == 200) {
+            if ($itemsResponse->hasHeader('Content-Length')) {
+                $contentLength = $itemsResponse->getHeader('Content-Length')[0];
                 echo "<p> Downloaded $contentLength bytes of data. </p>";
             }
-            $news = $this->parseRss($feed_response->getBody());
+            $items = $this->parseItems($itemsResponse->getBody());
         }
 
-        return $news;
+        return $items;
     }
 
-    public function parseRss($body): array
+    public function parseItems($body): array
     {
-        $news = [];
-        $xml = new SimpleXMLElement($body);
-
-        foreach($xml->channel->item as $item) {
-            $title = $item->title;
-            $message = $item->description;
-            $news[] = ['title' => $title, 'message' => $message];
+        $items = [];
+        $xml = new SimpleXMLElement($body->getContents());
+        $titles = explode('<dc:title xml:lang="en-US">', $xml->asXML());
+        array_shift($titles);
+        foreach ($titles as $title) {
+            $items[] = explode('</dc:title>', $title)[0];
         }
 
-        return $news;
+        return $items;
     }
 }

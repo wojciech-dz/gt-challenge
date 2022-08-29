@@ -10,7 +10,9 @@
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+            <script type="text/javascript"></script>
+            <script language="JavaScript" type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+            <script src="{{ asset('js/gtnumbers.js') }}"></script>
         {% endblock %}
     </head>
     <body>

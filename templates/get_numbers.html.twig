@@ -3,9 +3,18 @@
 {% block title %}RSS url{% endblock %}
 
 {% block body %}
-    <h3>Podaj adres źródła RSS</h3>
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    <h3>Wprowadź numer filmu:</h3>
+    <div class="wrapper">
+        <div id="numbers">
+            <input id="number0" type="text" name="number[]" class="number" size="30" placeholder="Numer filmu">
+            <button name="check[]" id="check0" class="check" data-lp="0">SPRAWDŹ</button>
+        </div>
+        <div class="controls">
+            <a href="#" id="add_more_fields"><i class="fa fa-plus"></i>Add More</a>
+        </div>
+    </div>
+    <div id="just-titles"></div>
+    <br>
+    <button name="generate" id="generate" class="generate" disabled="disabled">GENERUJ</button>
+    <input type="hidden" id="PATH_check_film" value="{{ path('app_check_film') }}"/>
 {% endblock %}
