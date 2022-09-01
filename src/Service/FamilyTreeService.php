@@ -3,8 +3,6 @@
 namespace App\Service;
 
 use GuzzleHttp\Client;
-use SimpleXMLElement;
-use SplFileObject;
 
 class FamilyTreeService
 {
@@ -14,7 +12,7 @@ class FamilyTreeService
     {
         $items = [];
         $this->client = new Client([
-            'headers' => ['User-Agent' => 'QuasiReader']
+            'headers' => ['Accept' => 'application/xml']
         ]);
         $itemsResponse = $this->client->request('GET', $url);
         if ($itemsResponse->getStatusCode() == 200) {
@@ -31,13 +29,12 @@ class FamilyTreeService
     public function parseItems($body): array
     {
         $items = [];
-        $xml = new SimpleXMLElement($body->getContents());
-        $titles = explode('<dc:title xml:lang="en-US">', $xml->asXML());
-        array_shift($titles);
-        foreach ($titles as $title) {
-            $items[] = explode('</dc:title>', $title)[0];
+        libxml_use_internal_errors(true);
+        $doc = new  \DOMDocument();
+        $doc->loadHTML($body);
+        foreach ($doc->getElementsByTagName("creator") as $node) {
+            $items[] = $node->nodeValue;
         }
-
         return $items;
     }
 }
